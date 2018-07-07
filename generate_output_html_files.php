@@ -1,9 +1,11 @@
 <?php
 	// Settings
 	$fileDir = '/../';
-	$fileExtensions = 'php'; // Seperate by comma.
+	$fileExtensions = 'php'; // Seperate by comma. Can support multiple extensions.
 	$newExtension = 'html';
 	$compiledDestination = '/../compiled_html/';
+	$shouldBeautify = true;
+	// End Settings
 	
 	$rootPath = realpath(dirname(__FILE__));
 	
@@ -11,16 +13,19 @@
 	require_once($rootPath . '/vendor/beautify-html/beautify-html.php');
 	
 	// Set the beautify options
-	$beautify = new Beautify_Html(array(
-	  'indent_inner_html' => false,
-	  'indent_char' => " ",
-	  'indent_size' => 4,
-	  'wrap_line_length' => 32786,
-	  'unformatted' => ['code', 'pre'],
-	  'preserve_newlines' => false,
-	  'max_preserve_newlines' => 32786,
-	  'indent_scripts'	=> 'normal' // keep|separate|normal
-	));
+	$beautify = false;
+	if($shouldBeautify = true) {
+		$beautify = new Beautify_Html(array(
+		  'indent_inner_html' => false,
+		  'indent_char' => " ",
+		  'indent_size' => 4,
+		  'wrap_line_length' => 32786,
+		  'unformatted' => ['code', 'pre'],
+		  'preserve_newlines' => false,
+		  'max_preserve_newlines' => 32786,
+		  'indent_scripts'	=> 'normal' // keep|separate|normal
+		));
+	}
 	
 	// Loop through the directory finding all files with that extension.
 	$files = glob($rootPath . $fileDir . '*.{' . $fileExtensions . '}', GLOB_BRACE);
@@ -45,9 +50,13 @@
 		}
 		
 		if($newFileName != false) {
-			print "Beautifying & Saving " . $file . " to " . $compiledDestination . $newFileName . "\n";
+			$outputLog = "Saving " . $file . " to " . $compiledDestination . $newFileName . "\n";
 			
-			$beautifiedHtmlOutput = $beautify->beautify($htmlOutput);
+			if($shouldBeautify == true && $beautify != false) {
+				$outputLog = 'Beautifying & ' . $outputLog;
+				
+				$htmlOutput = $beautify->beautify($htmlOutput);
+			}
 			
 			file_put_contents($rootPath . $compiledDestination . $newFileName, $htmlOutput);
 		}
