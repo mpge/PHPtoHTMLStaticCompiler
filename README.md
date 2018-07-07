@@ -18,3 +18,7 @@ php generate_output_html_files.php
 You can turn on/off beautifying using the option at the top of the file. The Beautifying feature leverages IvanWeller's PHP script at the following repo:
 
 https://github.com/ivanweiler/beautify-html/
+
+### Why didn't you use composer?
+
+I really just wanted a simple script I could drop into any project, and go without any setup required (even though I know Composer is super simple). As such, I decided to leave composer out of this project. By all means, feel free to repurpose this project to include composer if you see the need.
