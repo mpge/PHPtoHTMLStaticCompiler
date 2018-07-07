@@ -1,4 +1,4 @@
-# PHPtoHTMLStaticCompiler
+# PHP to HTML Static Compiler
 A really simple script to compile PHP files to static HTML (using a beautifier). Convenient when you want to use things like partials but your clients want static HTML files.
 
 This was just a simple script I wrote for the purpose mentioned above. If you have any questions, or concerns feel free to contact me or create an issue.
