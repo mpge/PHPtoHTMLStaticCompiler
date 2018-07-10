@@ -34,6 +34,7 @@
 	$newExtension = 'html';
 	$compiledDestination = '/../compiled_html/';
 	$shouldBeautify = true;
+	$shouldFixUTFQuotes = true;
 	// End Settings
 	
 	$rootPath = realpath(dirname(__FILE__));
@@ -85,6 +86,27 @@
 				$outputLog = 'Beautifying & ' . $outputLog;
 				
 				$htmlOutput = $beautify->beautify($htmlOutput);
+			}
+			
+			if($shouldFixUTFQuotes == true) {
+				// add the function
+				function convert_smart_quotes($string) {
+					$search = array(chr(0xe2) . chr(0x80) . chr(0x98),
+							chr(0xe2) . chr(0x80) . chr(0x99),
+							chr(0xe2) . chr(0x80) . chr(0x9c),
+							chr(0xe2) . chr(0x80) . chr(0x9d),
+							chr(0xe2) . chr(0x80) . chr(0x93),
+							chr(0xe2) . chr(0x80) . chr(0x94),
+							chr(226) . chr(128) . chr(153),
+							'â€™','â€œ','â€<9d>','â€"','Â  ');
+
+					 $replace = array("'","'",'"','"',' - ',' - ',"'","'",'"','"',' - ',' ');
+
+					return str_replace($search, $replace, $string);
+				}
+				
+				// and run it.
+				$htmlOutput = convert_smart_quotes($htmlOutput);
 			}
 			
 			file_put_contents($rootPath . $compiledDestination . $newFileName, $htmlOutput);
